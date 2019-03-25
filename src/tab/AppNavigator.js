@@ -3,7 +3,7 @@ import HomeScreen from './HomeScreen' //引入首页
 import Mine from './Mine'
 import Detail from '../Detail'
 import {Image} from 'react-native'
-
+import RecyclerView from '../RecyclerView'
 // 主页面
 const TabNavigator=createBottomTabNavigator({
    //首页
@@ -13,14 +13,14 @@ const TabNavigator=createBottomTabNavigator({
       tabBarLabel: '首页',
     }
   },
-  mine:{
+  Mine:{
     screen:Mine ,  //个人中心页面
     navigationOptions:{
       tabBarLabel: '个人中心',
       //下面是设置tabbar的图标
-      // tabBarIcon:({focused})=>{
+      tabBarIcon:({focused})=>{
         
-      // }
+      }
     }
   }
 },{
@@ -32,11 +32,12 @@ const TabNavigator=createBottomTabNavigator({
   //tabBarComponent：<Image/>,
   tabBarPosition: 'bottom',  
   //order:['Home','Mine'], //点开源码 可以看到是string类型数组
-  tabBarOptions:{
-    activeTintColor: 'red',//标签和图标选中颜色
-    activeBackgroundColor: 'yellow',//导航选中背景色
-    inactiveTintColor: '#000', //标签和图标未选中颜色
-  }
+  // tabBarOptions:{
+  //   activeTintColor: 'red',//标签和图标选中颜色
+  //   activeBackgroundColor: 'yellow',//导航选中背景色
+  //   inactiveTintColor: '#000', //标签和图标未选中颜色
+  // }
+  
 })
 
 //导航页面
@@ -46,6 +47,9 @@ const AppNavigator = createStackNavigator({
   },
   Detail: {
     screen: Detail,
+  },
+  RecyclerView: {
+    screen:RecyclerView,
   }
 }, {
   initialRouteName: 'TabNavigator',

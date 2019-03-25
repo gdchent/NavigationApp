@@ -21,9 +21,15 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-
+// 关闭警告
+console.disableYellowBox = true
 type Props = {};
 export default class App extends Component<Props> {
+
+  constructor(props){
+     super(props)
+     console.log('app',__DEV__)
+  }
   render() {
     return (
       <AppContainer 
