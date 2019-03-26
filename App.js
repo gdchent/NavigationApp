@@ -12,7 +12,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 import CodePush from "react-native-code-push"; // 引入code-push
 import { createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation'
 import AppNavigator from './src/tab/AppNavigator' //获取页面导航栏 StackNavigator
-
+import CodePushView from './src/components/CodePushView '
 const CODEPUSH_TIMEOUT = 10 * 1000 // 10s 超时 
 //获取一个AppContainer
 const AppContainer = createAppContainer(AppNavigator);
@@ -75,7 +75,7 @@ class App extends Component<Props> {
     )
   }
 
-  热更新的状态
+  //热更新的状态
   codePushStatusDidChange(syncStatus) {
     console.log('获取状态', syncStatus)
     switch (syncStatus) {
@@ -106,21 +106,7 @@ class App extends Component<Props> {
     }
   }
 
-  //测试显示更新文件
-  CodePushView = ({ syncMessage, progress }) => {
-    return (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={styles.codepush}>
-          <Text>{syncMessage}</Text>
-          {!!progress.receivedBytes && !!progress.totalBytes && (
-            <Text>
-              正在下载更新文件: {(progress.receivedBytes / progress.totalBytes * 100).toFixed(2)}%
-            </Text>
-          )}
-        </View>
-      </View>
-    )
-  }
+  
   codePushDownloadDidProgress(progress) {
     //console.log('progress', progress)
     this.setState({ progress })
