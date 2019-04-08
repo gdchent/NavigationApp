@@ -94,41 +94,39 @@ class App extends Component<Props> {
 
   //热更新的状态
   codePushStatusDidChange(syncStatus) {
-    if (this.state.immediateUpdate) {
-      switch (syncStatus) {
-        case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
-          console.log('检测最新配置状态')
-          this.setState({ syncMessage: "检测最新配置信息" })
-          break
-        case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
-          console.log('下载最新配置文件')
-          this.setState({ syncMessage: "下载最新配置文件" })
-          break
-        case CodePush.SyncStatus.AWAITING_USER_ACTION:
-          console.log('"等待操作" ')
-          this.setState({ syncMessage: "等待操作" })
-          break
-        case CodePush.SyncStatus.INSTALLING_UPDATE:
-          console.log('更新完成')
-          this.setState({ syncMessage: "更新完成" })
-          break
-        case CodePush.SyncStatus.UP_TO_DATE:
-          console.log('当前已经是最新版本')
-          this.setState({ syncMessage: "当前已是最新版本", progress: false })
-          break
-        case CodePush.SyncStatus.UPDATE_IGNORED:
-          console.log('更新已经取消')
-          this.setState({ syncMessage: "更新已被取消", progress: false })
-          break
-        case CodePush.SyncStatus.UPDATE_INSTALLED:
-          console.log('更新安装已经完成')
-          this.setState({ syncMessage: "更新已安装等待重启生效", progress: false })
-          break
-        case CodePush.SyncStatus.UNKNOWN_ERROR:
-          console.log('更新发生错误')
-          this.setState({ syncMessage: "更新发生错误", progress: false })
-          break
-      }
+    switch (syncStatus) {
+      case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
+        console.log('检测最新配置状态')
+        this.setState({ syncMessage: "检测最新配置信息" })
+        break
+      case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+        console.log('下载最新配置文件')
+        this.setState({ syncMessage: "下载最新配置文件" })
+        break
+      case CodePush.SyncStatus.AWAITING_USER_ACTION:
+        console.log('"等待操作" ')
+        this.setState({ syncMessage: "等待操作" })
+        break
+      case CodePush.SyncStatus.INSTALLING_UPDATE:
+        console.log('更新完成')
+        this.setState({ syncMessage: "更新完成" })
+        break
+      case CodePush.SyncStatus.UP_TO_DATE:
+        console.log('当前已经是最新版本')
+        this.setState({ syncMessage: "当前已是最新版本", progress: false })
+        break
+      case CodePush.SyncStatus.UPDATE_IGNORED:
+        console.log('更新已经取消')
+        this.setState({ syncMessage: "更新已被取消", progress: false })
+        break
+      case CodePush.SyncStatus.UPDATE_INSTALLED:
+        console.log('更新安装已经完成')
+        this.setState({ syncMessage: "更新已安装等待重启生效", progress: false })
+        break
+      case CodePush.SyncStatus.UNKNOWN_ERROR:
+        console.log('更新发生错误')
+        this.setState({ syncMessage: "更新发生错误", progress: false })
+        break
     }
   }
 
