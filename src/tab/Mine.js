@@ -25,7 +25,7 @@ class Mine extends React.Component{
      }
      render(){
          return (
-             <View style={{flex:1,backgroundColor:'green'}}>
+             <View style={{flex:1}}>
                 <Text>我是个人中心</Text>
              </View>
          )

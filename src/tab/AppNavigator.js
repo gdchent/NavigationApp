@@ -30,14 +30,7 @@ const TabNavigator=createBottomTabNavigator({
   },
   lazy:false,  //懒加载
   //tabBarComponent：<Image/>,
-  tabBarPosition: 'bottom',  
-  //order:['Home','Mine'], //点开源码 可以看到是string类型数组
-  // tabBarOptions:{
-  //   activeTintColor: 'red',//标签和图标选中颜色
-  //   activeBackgroundColor: 'yellow',//导航选中背景色
-  //   inactiveTintColor: '#000', //标签和图标未选中颜色
-  // }
-  
+  tabBarPosition: 'bottom',    
 })
 
 //导航页面

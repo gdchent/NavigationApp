@@ -30,36 +30,49 @@ class App extends Component<Props> {
 
   constructor(props) {
     super(props)
+    this.currProgress = 0.0
+    this.syncMessage = ''
     this.state = {
       syncMessage: '',
       progress: true,
       enterHome: false, //是否进入主页面
     }
-    console.log('app', __DEV__)
+
   }
 
   componentWillMount = () => {
     console.log('conponentWill')
     const { progress } = this.state
-    setTimeout(() => {
-      console.log('will定时器', progress)
-      if (!(progress && progress.receivedBytes && progress.totalBytes)) {
-        //定时器 磨10s钟
-        CodePush.disallowRestart() // 禁止重启
-        this.setState({ enterHome: true })
-      }
-    }, CODEPUSH_TIMEOUT);
 
+    //检测是否有热更新
 
-    // 启动热更新
-    if (Platform.OS === 'ios') {
-      this.sync()
-    } else {
-      this.syncImmediate()
-    }
+    CodePush.checkForUpdate()
+      .then((update) => {
+        if (!update) {
+          //设置直接进入主页面
+          console.log('当前已经是最新版本')
+        } else {
+          setTimeout(() => {
+            console.log('will定时器', progress)
+            if (!(progress && progress.receivedBytes && progress.totalBytes)) {
+              //定时器 磨10s钟
+              CodePush.disallowRestart() // 禁止重启
+              this.setState({ enterHome: true })
+            }
+          }, CODEPUSH_TIMEOUT);
+          // 启动热更新
+          if (Platform.OS === 'ios') {
+            this.sync()
+          } else {
+            this.syncImmediate()
+          }
+        }
+      })
+
   }
   componentDidMount = () => {
-    CodePush.disallowRestart()
+    CodePush.allowRestart()
+    CodePush.notifyAppReady()
   }
   /** Update is downloaded silently, and applied on restart (recommended) */
   sync() {
@@ -81,40 +94,41 @@ class App extends Component<Props> {
 
   //热更新的状态
   codePushStatusDidChange(syncStatus) {
-
-    switch (syncStatus) {
-      case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
-        console.log('检测最新配置状态')
-        this.setState({ syncMessage: "检测最新配置信息" })
-        break
-      case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
-        console.log('下载最新配置文件')
-        this.setState({ syncMessage: "下载最新配置文件" })
-        break
-      case CodePush.SyncStatus.AWAITING_USER_ACTION:
-        console.log('"等待操作" ')
-        this.setState({ syncMessage: "等待操作" })
-        break
-      case CodePush.SyncStatus.INSTALLING_UPDATE:
-        console.log('更新完成')
-        this.setState({ syncMessage: "更新完成" })
-        break
-      case CodePush.SyncStatus.UP_TO_DATE:
-        console.log('当前已经是最新版本')
-        this.setState({ syncMessage: "当前已是最新版本", progress: false })
-        break
-      case CodePush.SyncStatus.UPDATE_IGNORED:
-        console.log('更新已经取消')
-        this.setState({ syncMessage: "更新已被取消", progress: false })
-        break
-      case CodePush.SyncStatus.UPDATE_INSTALLED:
-        console.log('更新安装已经完成')
-        this.setState({ syncMessage: "更新已安装等待重启生效", progress: false })
-        break
-      case CodePush.SyncStatus.UNKNOWN_ERROR:
-        console.log('更新发生错误')
-        this.setState({ syncMessage: "更新发生错误", progress: false })
-        break
+    if (this.state.immediateUpdate) {
+      switch (syncStatus) {
+        case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
+          console.log('检测最新配置状态')
+          this.setState({ syncMessage: "检测最新配置信息" })
+          break
+        case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+          console.log('下载最新配置文件')
+          this.setState({ syncMessage: "下载最新配置文件" })
+          break
+        case CodePush.SyncStatus.AWAITING_USER_ACTION:
+          console.log('"等待操作" ')
+          this.setState({ syncMessage: "等待操作" })
+          break
+        case CodePush.SyncStatus.INSTALLING_UPDATE:
+          console.log('更新完成')
+          this.setState({ syncMessage: "更新完成" })
+          break
+        case CodePush.SyncStatus.UP_TO_DATE:
+          console.log('当前已经是最新版本')
+          this.setState({ syncMessage: "当前已是最新版本", progress: false })
+          break
+        case CodePush.SyncStatus.UPDATE_IGNORED:
+          console.log('更新已经取消')
+          this.setState({ syncMessage: "更新已被取消", progress: false })
+          break
+        case CodePush.SyncStatus.UPDATE_INSTALLED:
+          console.log('更新安装已经完成')
+          this.setState({ syncMessage: "更新已安装等待重启生效", progress: false })
+          break
+        case CodePush.SyncStatus.UNKNOWN_ERROR:
+          console.log('更新发生错误')
+          this.setState({ syncMessage: "更新发生错误", progress: false })
+          break
+      }
     }
   }
 
@@ -122,6 +136,15 @@ class App extends Component<Props> {
   codePushDownloadDidProgress(progress) {
     //console.log('progress', progress)
     this.setState({ progress })
+
+    if (this.state.immediateUpdate) {
+      this.currProgress = parseFloat(progress.receivedBytes / progress.totalBytes).toFixed(2)
+      if (this.currProgress >= 1) {
+        this.setState({ modalVisible: false })
+      } else {
+        this.refs.progressBar.progress = this.currProgress
+      }
+    }
   }
 
   render() {
@@ -138,4 +161,9 @@ class App extends Component<Props> {
     );
   }
 }
-export default App
+
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START
+}
+const AppCodePush = CodePush(codePushOptions)(App)
+export default AppCodePush
