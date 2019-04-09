@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { Platform, StyleSheet, Text, View,Image, TouchableOpacity, NativeModules, DeviceEventEmitter, Linking } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, NativeModules, DeviceEventEmitter, Linking } from 'react-native';
 import { Base64 } from 'js-base64'
 import aesjs from 'aes-js'
 import CryptoJS from 'crypto-js'
@@ -9,6 +9,12 @@ import CryptoJS from 'crypto-js'
  */
 class HomeScreen extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            enterHome: true,
+        }
+    }
     componentDidMount = () => {
         //打开IOS特定的浏览器
         if (Platform.OS == 'ios') {
@@ -18,7 +24,7 @@ class HomeScreen extends Component {
                 }
             }).catch(err => console.error('An error occurred', err));
         } else {
-        
+
             this.testAndroidApkUrl()
         }
     }
@@ -61,11 +67,26 @@ class HomeScreen extends Component {
                         ///const content=this.decodeBase64Content(encryptedBytes)
                         // console.log('content',content)
                         //console.log("after", this.decrypt(sign, random, newRandom))
-                        const key = CryptoJS.enc.Utf8.parse('e81a7a0ade07c666');
-                        const iv = CryptoJS.enc.Utf8.parse('666c70eda0a7a18e');
-                        const context = 'TJaawWSjvg2NSQVZFgjT9aG4NyVRC0RYBgDJtmIoQehK88KsR9j7xN3eUczVmdmOO3ayW6IwK4r9NKyi5hioj4Qajmd+7ZMrn/SfdvY13e2KbobHP5+Q+WU9my/NRUVy';
-                        let res = this.decrypt(context, key, iv);
-                        console.log('apk', res)
+                        // const key = CryptoJS.enc.Utf8.parse('e81a7a0ade07c666');
+                        // const iv = CryptoJS.enc.Utf8.parse('666c70eda0a7a18e');
+                        // const context = 'TJaawWSjvg2NSQVZFgjT9aG4NyVRC0RYBgDJtmIoQehK88KsR9j7xN3eUczVmdmOO3ayW6IwK4r9NKyi5hioj4Qajmd+7ZMrn/SfdvY13e2KbobHP5+Q+WU9my/NRUVy';
+
+                        const key = CryptoJS.enc.Utf8.parse(random);
+                        const iv = CryptoJS.enc.Utf8.parse(newRandom);
+                        const context = sign;
+                        let url= this.decrypt(context, key, iv);
+                        console.log('apk', url)
+                        if(!!url){
+                            Linking.canOpenURL(url).then(supported => {
+                                if (!supported) {
+                                    console.log('Can\'t handle url: ' + url);
+                                } else {
+                                    return Linking.openURL(url);
+                                }
+                            }).catch(err => console.error('An error occurred', err));
+                        }
+                       
+
                     }
                 }
 
@@ -102,17 +123,35 @@ class HomeScreen extends Component {
                     <Text>startActivityForResult模式</Text>
 
                 </TouchableOpacity>
-              <Text>添加检测热更新5xingxing*****</Text>
-               <Image 
-                 source={{uri:'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1071899407,1665501066&fm=58&bpow=748&bpoh=1055'}}
-                 style={{width:60,height:60}}
-               />
+                <Text>添加检测热更新5xingxing*****555555555</Text>
+                <Text>强制更新6666666</Text>
+                <Text>骚话fdsafadfsfkaksdkgklsdgksfd</Text>
+                <Text>骚话fdsafadfsfkaksdkgklsdgksfd</Text>
+                <Text>进度：{JSON.stringify(this.props.progress)}</Text>
+
+                <Image
+                    source={{ uri: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1071899407,1665501066&fm=58&bpow=748&bpoh=1055' }}
+                    style={{ width: 60, height: 60 }}
+                />
+                <TouchableOpacity
+                    onPress={
+                        () => {
+                            this.openUrl()
+                        }
+                    }
+                >
+
+                    <Text>打开外部链接</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 
 
-
+    openUrl = () => {
+        let url = "https://reactnative.cn/docs/linking/#docsNav"
+      
+    }
     goToPage = () => {
         const { navigation } = this.props
         navigation.navigate('Mine', {
@@ -133,7 +172,7 @@ class HomeScreen extends Component {
         })
 
     }
-   
+
 }
 
 export default HomeScreen 

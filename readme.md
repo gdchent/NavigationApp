@@ -2,11 +2,13 @@
 code-push app add ReactNativeCodePushDemo-ios ios react-native  
 ## RN的code-push测试跟生产环境的key  
 Production对应的是生产的Deployment Key，Staging是开发时使用。  
+┌────────────┬──────────────────────────────────────────────────────────────────┐
 │ Name       │ Deployment Key                                                   │
 ├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Production │ OinZF3-vDekaCmElv9-0RNEdwC_1c79ceee2-a7d1-49f3-8759-0a8b003248f6 │
+│ Production │ fEkqZX_2EIENACjhPaXw3KDccWiTc79ceee2-a7d1-49f3-8759-0a8b003248f6 │
 ├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Staging    │ no-sHUagYl_A_ALkeb1OknWrznS4c79ceee2-a7d1-49f3-8759-0a8b003248f6 │
+│ Staging    │ VXcVnkX6PjHZXUNmeXs6cZB1gUhDc79ceee2-a7d1-49f3-8759-0a8b003248f6 │
+└────────────┴──────────────────────────────────────────────────────────────────┘
 ### 添加应用  
 code-push app add MyRnSecondApp android react-native
 ### 删除应用命令  

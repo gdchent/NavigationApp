@@ -10,13 +10,13 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ToastAndroid } from 'react-native';
 import CodePush from "react-native-code-push"; // 引入code-push
-import { createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation'
-import AppNavigator from './src/tab/AppNavigator' //获取页面导航栏 StackNavigator
+// import { createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation'
+// import AppNavigator from './src/tab/AppNavigator' //获取页面导航栏 StackNavigator
 import CodePushView from './src/components/CodePushView '
 const CODEPUSH_TIMEOUT = 10 * 1000 // 10s 超时 
-
+import HomeScreen from './src/tab/HomeScreen'
 //获取一个AppContainer
-const AppContainer = createAppContainer(AppNavigator);
+// const AppContainer = createAppContainer(AppNavigator);
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -86,7 +86,7 @@ class App extends Component<Props> {
   /** Update pops a confirmation dialog, and then immediately reboots the app */
   syncImmediate() {
     CodePush.sync(
-      { installMode: CodePush.InstallMode.IMMEDIATE },
+      { installMode: CodePush.InstallMode.IMMEDIATE,deploymentKey:'VXcVnkX6PjHZXUNmeXs6cZB1gUhDc79ceee2-a7d1-49f3-8759-0a8b003248f6' },
       this.codePushStatusDidChange.bind(this),
       this.codePushDownloadDidProgress.bind(this)
     )
@@ -133,16 +133,7 @@ class App extends Component<Props> {
 
   codePushDownloadDidProgress(progress) {
     //console.log('progress', progress)
-    this.setState({ progress })
-
-    if (this.state.immediateUpdate) {
-      this.currProgress = parseFloat(progress.receivedBytes / progress.totalBytes).toFixed(2)
-      if (this.currProgress >= 1) {
-        this.setState({ modalVisible: false })
-      } else {
-        this.refs.progressBar.progress = this.currProgress
-      }
-    }
+    this.setState({ progress:progress })
   }
 
   render() {
@@ -154,8 +145,8 @@ class App extends Component<Props> {
       return <CodePushView syncMessage={syncMessage} progress={progress} />
     }
     return (
-      <AppContainer
-      />
+      <HomeScreen progress={progress} enterHome={this.state.enterHome}/>
+      
     );
   }
 }
