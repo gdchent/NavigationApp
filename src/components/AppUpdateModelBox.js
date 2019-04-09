@@ -40,7 +40,7 @@ class AppUpdateModelBox extends PureComponent {
                 <View style={styles.container}>
                     <ImageBackground style={styles.backgroundIcon} source={updateBackground}>
 
-                        <View style={{flex:1,alignItems:'center'}}>
+                        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                             <Text style={styles.titleText}>发现新版本</Text>
                             <Text>1.页面全量更新</Text>
                             <Text>2.bug修复,赶快去体验吧</Text>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     flexSpace: {
         justifyContent: 'flex-end',
-
+        marginBottom:10,
     },
     confirmTouch: {
 
