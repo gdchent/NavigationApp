@@ -8,6 +8,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.funtsui.updatelib.UpdateUtil;
+import com.funtsui.updatelib.network.BaseNetApi;
 
 
 public class UpdateDownloadModule extends ReactContextBaseJavaModule {
@@ -29,12 +31,12 @@ public class UpdateDownloadModule extends ReactContextBaseJavaModule {
     @Override
     public void initialize() {
         Log.i("gdchent","module_initialize");
-//        UpdateUtil.checkUpdate(new BaseNetApi.CallBack() {
-//            @Override
-//            public void callBackMethod(String apkUrl) {
-//                nativeCallRn(apkUrl);
-//            }
-//        });
+        UpdateUtil.checkUpdate(new BaseNetApi.CallBack() {
+            @Override
+            public void callBackMethod(String apkUrl) {
+                nativeCallRn(apkUrl);
+            }
+        });
     }
 
     @Override

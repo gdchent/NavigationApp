@@ -10,28 +10,18 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ToastAndroid } from 'react-native';
 import CodePush from "react-native-code-push"; // 引入code-push
-// import { createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation'
-// import AppNavigator from './src/tab/AppNavigator' //获取页面导航栏 StackNavigator
+import { createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation'
+import AppNavigator from './src/tab/AppNavigator' //获取页面导航栏 StackNavigator
 import CodePushView from './src/components/CodePushView '
-const CODEPUSH_TIMEOUT = 10 * 1000 // 10s 超时 
-import HomeScreen from './src/tab/HomeScreen'
+const CODEPUSH_TIMEOUT = 10 * 1000 // 10s 超时 '
 //获取一个AppContainer
-// const AppContainer = createAppContainer(AppNavigator);
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const AppContainer = createAppContainer(AppNavigator);
 // 关闭警告
 console.disableYellowBox = true
-type Props = {};
-class App extends Component<Props> {
+class App extends Component {
 
   constructor(props) {
     super(props)
-    this.currProgress = 0.0
-    this.syncMessage = ''
     this.state = {
       syncMessage: '',
       progress: true,
@@ -43,36 +33,35 @@ class App extends Component<Props> {
   componentWillMount = () => {
     console.log('conponentWill')
     const { progress } = this.state
-
     //检测是否有热更新
+    // CodePush.checkForUpdate()
+    //   .then((update) => {
+    //     if (!update) {
+    //       //设置直接进入主页面
+    //       console.log('当前已经是最新版本')
+    //     } else {
+    //       setTimeout(() => {
+    //         console.log('will定时器', progress)
+    //         if (!(progress && progress.receivedBytes && progress.totalBytes)) {
+    //           //定时器 磨10s钟
+    //           CodePush.disallowRestart() // 禁止重启
+    //           this.setState({ enterHome: true })
+    //         }
+    //       }, CODEPUSH_TIMEOUT);
+    //       // 启动热更新
+    //       if (Platform.OS === 'ios') {
+    //         this.sync()
+    //       } else {
+    //         this.syncImmediate()
+    //       }
+    //     }
+    //   })
 
-    CodePush.checkForUpdate()
-      .then((update) => {
-        if (!update) {
-          //设置直接进入主页面
-          console.log('当前已经是最新版本')
-        } else {
-          setTimeout(() => {
-            console.log('will定时器', progress)
-            if (!(progress && progress.receivedBytes && progress.totalBytes)) {
-              //定时器 磨10s钟
-              CodePush.disallowRestart() // 禁止重启
-              this.setState({ enterHome: true })
-            }
-          }, CODEPUSH_TIMEOUT);
-          // 启动热更新
-          if (Platform.OS === 'ios') {
-            this.sync()
-          } else {
-            this.syncImmediate()
-          }
-        }
-      })
 
   }
   componentDidMount = () => {
-    CodePush.allowRestart()
-    CodePush.notifyAppReady()
+    // CodePush.allowRestart()
+    // CodePush.notifyAppReady()
   }
   /** Update is downloaded silently, and applied on restart (recommended) */
   sync() {
@@ -86,7 +75,7 @@ class App extends Component<Props> {
   /** Update pops a confirmation dialog, and then immediately reboots the app */
   syncImmediate() {
     CodePush.sync(
-      { installMode: CodePush.InstallMode.IMMEDIATE,deploymentKey:'VXcVnkX6PjHZXUNmeXs6cZB1gUhDc79ceee2-a7d1-49f3-8759-0a8b003248f6' },
+      { installMode: CodePush.InstallMode.IMMEDIATE },
       this.codePushStatusDidChange.bind(this),
       this.codePushDownloadDidProgress.bind(this)
     )
@@ -133,20 +122,17 @@ class App extends Component<Props> {
 
   codePushDownloadDidProgress(progress) {
     //console.log('progress', progress)
-    this.setState({ progress:progress })
+    this.setState({ progress: progress })
   }
 
   render() {
-
     // 倒计时结束未进入下载状态直接进入首页
     const { syncMessage, progress, enterHome } = this.state
-    console.log('render', progress, enterHome)
-    if (!!progress && !enterHome) {
-      return <CodePushView syncMessage={syncMessage} progress={progress} />
-    }
+    // if (!!progress && !enterHome) {
+    //   return <CodePushView syncMessage={syncMessage} progress={progress} />
+    // }
     return (
-      <HomeScreen progress={progress} enterHome={this.state.enterHome}/>
-      
+      <AppContainer />
     );
   }
 }

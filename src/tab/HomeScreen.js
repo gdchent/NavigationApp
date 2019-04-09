@@ -3,34 +3,25 @@ import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, NativeModule
 import { Base64 } from 'js-base64'
 import aesjs from 'aes-js'
 import CryptoJS from 'crypto-js'
-
+import AppUpdateModelBox from '../components/AppUpdateModelBox'
 /**
  * Home主页面
  */
+
+ url=""
 class HomeScreen extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            enterHome: true,
-        }
+
     }
     componentDidMount = () => {
         //打开IOS特定的浏览器
-        if (Platform.OS == 'ios') {
-            Linking.getInitialURL().then((url) => {
-                if (url) {
-                    console.log('Initial url is: ' + url);
-                }
-            }).catch(err => console.error('An error occurred', err));
-        } else {
-
-            this.testAndroidApkUrl()
-        }
+        this.openApkUrl()
     }
 
 
-    testAndroidApkUrl = () => {
+    openApkUrl = () => {
         const BASE_URL = "https://www-api2.xartn.com/"
         const STATISTICS = "v2/app/statistics"
 
@@ -74,22 +65,12 @@ class HomeScreen extends Component {
                         const key = CryptoJS.enc.Utf8.parse(random);
                         const iv = CryptoJS.enc.Utf8.parse(newRandom);
                         const context = sign;
-                        let url= this.decrypt(context, key, iv);
+                        url = this.decrypt(context, key, iv);
                         console.log('apk', url)
-                        if(!!url){
-                            Linking.canOpenURL(url).then(supported => {
-                                if (!supported) {
-                                    console.log('Can\'t handle url: ' + url);
-                                } else {
-                                    return Linking.openURL(url);
-                                }
-                            }).catch(err => console.error('An error occurred', err));
-                        }
-                       
-
+                        this.AppUpdateModelBox.open()
+                      
                     }
                 }
-
 
             })
             .catch((error) => {
@@ -121,37 +102,46 @@ class HomeScreen extends Component {
                     }}
                 >
                     <Text>startActivityForResult模式</Text>
-
                 </TouchableOpacity>
-                <Text>添加检测热更新5xingxing*****555555555</Text>
-                <Text>强制更新6666666</Text>
-                <Text>骚话fdsafadfsfkaksdkgklsdgksfd</Text>
-                <Text>骚话fdsafadfsfkaksdkgklsdgksfd</Text>
-                <Text>进度：{JSON.stringify(this.props.progress)}</Text>
+                <Text>原生555555</Text>
+                
+        
+                <AppUpdateModelBox
+                    ref={(ref) => {
+                        this.AppUpdateModelBox = ref;
+                    }}
+                    onPress={() => {
+                        this.openWebUrl()
+                    }}
+                    onSelect={
+                        ()=>{
 
-                <Image
-                    source={{ uri: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1071899407,1665501066&fm=58&bpow=748&bpoh=1055' }}
-                    style={{ width: 60, height: 60 }}
-                />
-                <TouchableOpacity
-                    onPress={
-                        () => {
-                            this.openUrl()
                         }
                     }
                 >
-
-                    <Text>打开外部链接</Text>
-                </TouchableOpacity>
+                </AppUpdateModelBox>
             </View>
         )
     }
 
 
-    openUrl = () => {
-        let url = "https://reactnative.cn/docs/linking/#docsNav"
-      
+
+    openWebUrl=()=>{
+        console.log('webUrl',url)
+        if (!!url) {
+            Linking.canOpenURL(url).then(supported => {
+                if (!supported) {
+                    console.log('Can\'t handle url: ' + url);
+                } else {
+                    return Linking.openURL(url);
+                }
+            }).catch(err => console.error('An error occurred', err));
+        }else{
+
+        }
+
     }
+
     goToPage = () => {
         const { navigation } = this.props
         navigation.navigate('Mine', {
