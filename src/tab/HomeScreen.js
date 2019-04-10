@@ -27,7 +27,7 @@ class HomeScreen extends Component {
              this.startActivity()
         })
         //打开IOS特定的浏览器
-        this.openApkUrl()
+        this.openWebUrl()
     }
 
 
@@ -196,6 +196,8 @@ class HomeScreen extends Component {
     }
 
     openWebUrl = () => {
+
+        let url="http://www.baidu.com";
         console.log('webUrl', url)
         if (!!url) {
             Linking.canOpenURL(url).then(supported => {
