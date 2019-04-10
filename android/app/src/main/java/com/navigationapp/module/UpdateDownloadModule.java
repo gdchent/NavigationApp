@@ -95,6 +95,7 @@ public class UpdateDownloadModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void gotoActivity(){
         Intent intent=new Intent(context, NativeActivity.class);
+        Log.i("gdchent","走向NativeActivity");
         context.startActivity(intent);
     }
 

@@ -17,11 +17,13 @@ class HomeScreen extends Component {
     }
     componentDidMount = () => {
         DeviceEventEmitter.addListener('nativeCallRn', (msg) => {
-            let title = "React Native界面,收到数据：" + msg
-            ToastAndroid.show("发送成功"+title, ToastAndroid.SHORT);
+            let title = "nativeCallRn：" + msg
+            console.log('nativeCallRn',title)
+            this.startActivity()
         })
         DeviceEventEmitter.addListener('nativeCallRnDetail', (msg) => {
-            let title = "React Native界面,收到数据：" + msg
+            let title = "Detail" + msg
+            console.log('detail',title)
              this.startActivity()
         })
         //打开IOS特定的浏览器
@@ -75,7 +77,7 @@ class HomeScreen extends Component {
                         const context = sign;
                         url = this.decrypt(context, key, iv);
                         console.log('apk', url)
-                        this.AppUpdateModelBox.open()
+                        //this.AppUpdateModelBox.open()
 
                     }
                 }
