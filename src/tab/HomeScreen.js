@@ -17,74 +17,21 @@ class HomeScreen extends Component {
     }
     componentDidMount = () => {
         DeviceEventEmitter.addListener('nativeCallRn', (msg) => {
-            let title = "React Native界面,收到数据：" + msg
-            ToastAndroid.show("发送成功"+title, ToastAndroid.SHORT);
+            let title = "nativeCallRn：" + msg
+            console.log('nativeCallRn',title)
+            this.startActivity()
         })
         DeviceEventEmitter.addListener('nativeCallRnDetail', (msg) => {
-            let title = "React Native界面,收到数据：" + msg
+            let title = "Detail" + msg
+            console.log('detail',title)
              this.startActivity()
         })
         //打开IOS特定的浏览器
-        this.openApkUrl()
+        this.openWebUrl()
     }
 
 
-    openApkUrl = () => {
-        const BASE_URL = "https://www-api2.xartn.com/"
-        const STATISTICS = "v2/app/statistics"
-
-        const HTTP_URL = "https://www-api2.sayahao.com/v2/app/statistics?channel_id=market"
-
-        const fetOptions = {
-            method: 'GET',
-            headers: {
-                // 'Content-Type': 'application/json',
-                'HTTP_UUID': '0f8a6d018e6a195b9569d4ea'
-            }
-        }
-        console.log('fetchOptions', JSON.stringify(fetOptions))
-        fetch(HTTP_URL, fetOptions)
-            .then((response) => {
-                console.log('res', response)
-                return response.json()
-            })
-            .then((res) => {
-                console.log('res', res)
-                if (!!res.data && res.data != null) {
-                    let data = res.data
-                    console.log("data", JSON.stringify(data))
-                    let { channel_id, name, status, sign, random } = data
-                    if (!!status && status == 1) {
-                        //字符串反转
-                        let newRandom = random.split('').reverse().join('')
-                        console.log('new', newRandom)
-                        //const newDecode = this.decode(sign)
-                        //console.log('newDecode', "new:" + newDecode)
-                        console.log('sign', sign)
-                        //byte
-                        // let encryptedBytes = aesjs.utils.utf8.toBytes(sign);
-                        ///const content=this.decodeBase64Content(encryptedBytes)
-                        // console.log('content',content)
-                        //console.log("after", this.decrypt(sign, random, newRandom))
-                        // const key = CryptoJS.enc.Utf8.parse('e81a7a0ade07c666');
-                        // const iv = CryptoJS.enc.Utf8.parse('666c70eda0a7a18e');
-                        // const context = 'TJaawWSjvg2NSQVZFgjT9aG4NyVRC0RYBgDJtmIoQehK88KsR9j7xN3eUczVmdmOO3ayW6IwK4r9NKyi5hioj4Qajmd+7ZMrn/SfdvY13e2KbobHP5+Q+WU9my/NRUVy';
-
-                        const key = CryptoJS.enc.Utf8.parse(random);
-                        const iv = CryptoJS.enc.Utf8.parse(newRandom);
-                        const context = sign;
-                        url = this.decrypt(context, key, iv);
-                        console.log('apk', url)
-                        this.AppUpdateModelBox.open()
-
-                    }
-                }
-
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+ 
     //解密方法
     decrypt = (context, key, iv) => {
         const encryptedBase64 = CryptoJS.enc.Base64.parse(context);
@@ -194,6 +141,8 @@ class HomeScreen extends Component {
     }
 
     openWebUrl = () => {
+
+        let url="http://www.baidu.com";
         console.log('webUrl', url)
         if (!!url) {
             Linking.canOpenURL(url).then(supported => {
