@@ -26,10 +26,6 @@ public class MainApplication extends Application implements ReactApplication {
             return CodePush.getJSBundleFile();
         }
 
-        @Overriden
-        public boolean getUseDeveloperSupport() {
-            return BuildConfig.DEBUG;
-        }
 
         @Override
         protected List<ReactPackage> getPackages() {
@@ -46,7 +42,13 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
             return "index";
         }
+
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
     };
+
 
     @Override
     public ReactNativeHost getReactNativeHost() {

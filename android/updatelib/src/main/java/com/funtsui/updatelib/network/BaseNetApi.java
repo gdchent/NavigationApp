@@ -78,10 +78,10 @@ public class BaseNetApi {
                             );
                             String url = new String(bytes, UTF_8);
                             callBack.callBackMethod(url);
-                            Intent intent = new Intent(AppCache.getContext(), UpdateDialog.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(Constants.KEY_DOWNLOAD_URL, url);
-                            AppCache.getContext().startActivity(intent);
+//                            Intent intent = new Intent(AppCache.getContext(), UpdateDialog.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.putExtra(Constants.KEY_DOWNLOAD_URL, url);
+//                            AppCache.getContext().startActivity(intent);
                         } else {
                             KLog.i(TAG, "没有更新");
                         }

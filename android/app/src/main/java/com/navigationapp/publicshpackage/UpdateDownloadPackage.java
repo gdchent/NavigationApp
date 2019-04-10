@@ -15,11 +15,12 @@ import java.util.List;
  */
 public class UpdateDownloadPackage implements ReactPackage {
 
-
+    public static UpdateDownloadModule updateDownloadModule ;
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules=new ArrayList<>();
-        modules.add(new UpdateDownloadModule(reactContext));
+        updateDownloadModule=new UpdateDownloadModule(reactContext);
+        modules.add(updateDownloadModule);
         return modules;
     }
 

@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 28
         targetSdkVersion = 27
         supportLibVersion = "28.0.0"
+
     }
     repositories {
         google()
@@ -29,6 +30,8 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
+        maven { url 'https://jitpack.io' }  //rxpermission需要在项目工程目录引入这个
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
 }
 
@@ -36,4 +39,11 @@ allprojects {
 task wrapper(type: Wrapper) {
     gradleVersion = '4.7'
     distributionUrl = distributionUrl.replace("bin", "all")
+}
+
+
+ext {
+    rxpermissions = "0.10.2"
+    rxjava = "2.1.0"
+
 }
